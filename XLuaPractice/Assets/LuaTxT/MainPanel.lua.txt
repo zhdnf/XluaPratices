@@ -1,0 +1,59 @@
+
+-- 新对象， 就建表
+BasePanel:subClass("MainPanel")
+
+--[[
+-- 对象关联变量
+MainPanel.panelObj = nil
+MainPanel.btnRole = nil
+MainPanel.btnSkill = nil
+
+-- 实例化，处理对应逻辑
+
+-- 初始化，实例化，控件监听
+function MainPanel:Init()
+    if self.panelObj == nil then
+        self.panelObj = ABMgr:LoadRes("ui", "MainPanel", typeof(GameObject))
+        self.panelObj.transform:SetParent(Canvas, false)
+    
+        self.btnRole = self.panelObj.transform:Find("BtnRole"):GetComponent(typeof(Button))
+        print(self.btnRole)
+
+        -- self.btnRole.onClick:AddListener(self:BtnRoleClick) -> 无法使用self获取btn的组件
+        self.btnRole.onClick:AddListener(function()
+            self:BtnRoleClick()
+        end)
+    end
+end
+
+function MainPanel:ShowMe()
+    self:Init()
+    self.panelObj:SetActive(true)
+end
+
+function MainPanel:HideMe()
+    self.panelObj:SetActive(false)
+end
+
+function MainPanel:BtnRoleClick()
+    BagPanel:ShowMe()
+end
+--]]
+
+function MainPanel:Init(name)
+    
+    self.base.Init(self, name)
+
+    if self.isEventInit == false then
+        self:GetControl("btnRole","Button").onClick:AddListener(function()
+            self:BtnRoleClick()
+        end)
+        self.isEventInit = true
+    end
+end
+
+
+function MainPanel:BtnRoleClick()
+    -- BagPanel:ShowMe()
+    BagPanel:ShowMe("BagPanel")
+end
